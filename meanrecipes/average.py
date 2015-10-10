@@ -6,7 +6,7 @@ import functools, warnings
 from meanrecipes.recipe import Recipe
 from meanrecipes.units import ALLOWED_UNITS, convert_ingredient
 
-def ingredient_sum(a, b):
+def ingredient_sum(a, b, **kw):
     '''
     Computes the sum of two ingredients, taking into account units. Do note
     that, due to the treatment of name, this sum is not commutative.
@@ -20,7 +20,7 @@ def ingredient_sum(a, b):
     
     return (quantity_a + quantity_b, unit_a, name)
 
-def ingredient_scale(a, n):
+def ingredient_scale(a, n, **kw):
     '''
     Multiply the ingredient a by the scalar n.
     '''
@@ -33,7 +33,7 @@ def ingredient_zero(unit):
 
 
 
-def convert_units(intermediates, average):
+def convert_units(intermediates, average, **kw):
     '''
     This pass normalises units according to the rules in units.py.
     '''
@@ -43,7 +43,7 @@ def convert_units(intermediates, average):
     return intermediates, average
 
 
-def remove_suspicious_units(intermediates, average):
+def remove_suspicious_units(intermediates, average, **kw):
     '''
     Even once we have the grammatical parsing, we consider some semantic
     questions: what things actually make sense as units? There are surprisingly
@@ -66,7 +66,7 @@ def remove_suspicious_units(intermediates, average):
     return intermediates, average
 
 
-def take_mean_of_all_ingredients(intermediates, average):
+def take_mean_of_all_ingredients(intermediates, average, **kw):
     '''
     This pass adds every ingredient from the intermediates into the average,
     with a quantity which is the mean of all the individual quantities.
@@ -100,16 +100,63 @@ def take_mean_of_all_ingredients(intermediates, average):
                                  average.method)
 
 
+def union_methods(intermediates, average, **kw):
+    '''
+    This pass is the stupidest possible way of combining methods: we just
+    concatenate all the step 1s, then the step 2s, ..., the step ns.
+    '''
 
-compose = functools.partial(functools.reduce, lambda f, g: lambda *a: g(*f(*a)))
+    new_method = []
+    i = 0
+    
+    while True:
+        steps = [r.method[i] for r in intermediates if i < len(r.method)]
+        if len(steps) == 0:
+            break
 
-def average(intermediates, working_average):
+        new_method += steps
+        i += 1
+
+    return intermediates, Recipe(average.title,
+                                 average.ingredients,
+                                 new_method)
+
+
+def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
+    '''
+    This pass removes adjacent method steps that are very similar to each
+    other, to avoid repetitiveness.
+
+    Here, we define a measure of similarity between two steps, considered as
+    sets of words A and B, by
+        d(A, B) = \frac{ |A \cap B| }{ \max(|A|, |B|) }.
+    
+    If the similarity is above a certain threshold, we discard one of them.
+    '''
+    new_method = []
+
+    for i in range(0, len(average.method) - 1):
+        m = min(len(average.method[i]), len(average.method[i + 1]))
+        A = set(average.method[i].split(' ')[:m])
+        B = set(average.method[i + 1].split(' ')[:m])
+        d = len(A.intersection(B)) / m
+
+        if d < threshold:
+            new_method.append(average.method[i])
+
+    return intermediates, Recipe(average.title, average.ingredients, new_method)
+
+
+def average(intermediates, working_average, **kw):
     # The actual average function is the composition of all the passes, but we
     # ignore the intermediates that are left over.
+    compose = functools.partial(functools.reduce, lambda f, g: lambda *a: g(*f(*a, **kw), **kw))
     the_map = compose([
                 convert_units,
                 remove_suspicious_units,
-                take_mean_of_all_ingredients
+                take_mean_of_all_ingredients,
+                union_methods,
+                cull_similar_methods,
               ])
-    _, result = the_map(intermediates, working_average)
+    _, result = the_map(intermediates, working_average, **kw)
     return result
