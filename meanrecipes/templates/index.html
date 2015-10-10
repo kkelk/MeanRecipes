@@ -8,89 +8,91 @@
 <body>
 <div class="container-full">
 
-      <div class="row">
-       
-        <div class="col-lg-12 text-center v-center">
-          
-          <h1>Mean Recipes</h1>
-          <p class="lead">The absolutely average recipe generator</p>
-          
-          <p>Want to make some mean <strong><span class="text-info" id="suggestions"></span></strong>?</p>
-          
-          <form id="recipe-form" class="col-lg-7">
-            <div class="input-group" id="recipesearch" style="width:960px;text-align:center;margin:0 auto;">
-            <input id="recipe-title" class="form-control input-lg" title="recipe search" placeholder="Enter a recipe" type="text">
-	    <span class="input-group-btn">
-	    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />
-             
+    <div data-spy="affix">
+        <div class="row">
+
+            <div class="col-lg-12 text-center v-center">
+
+                <h1>Mean Recipes</h1>
+                <p class="lead">The absolutely average recipe generator</p>
+
+                <p>Want to make some mean <strong><span class="text-info" id="suggestions"></span></strong>?</p>
+
+                <form id="recipe-form" class="col-lg-7">
+                    <div class="input-group" id="recipesearch" style="width:960px;text-align:center;margin:0 auto;">
+                        <input autofocus id="recipe-title" class="form-control input-lg" title="recipe search" placeholder="Enter a recipe" type="text">
+                        <span class="input-group-btn">
+                            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />
+
+                        </div>
+                    </form>
+                    <form class="col-lg-1">
+                        <div class="input-group" style="width:140px;text-align:center;margin:0 auto;">
+                            <input class="form-control input-lg" title="recipe search" placeholder="serving size" type="text">
+                        </div>
+                    </form>
+
+                    <form class="col-lg-1">
+                        <span class="input-group-btn"><button class="btn btn-primary btn-lg" type="button">   OK   </button></span>
+
+
+                    </form>
+
+                </div>
+
+            </div>  
+
+            <div class="row">
+                <div class="center-block" style="width:300px;text-align:center; margin:20 auto;">
+                    <div id="slider-tooltip">
+                    </div>
+                </div>
             </div>
-          </form>
-	<form class="col-lg-1">
-            <div class="input-group" style="width:140px;text-align:center;margin:0 auto;">
-            <input class="form-control input-lg" title="recipe search" placeholder="serving size" type="text">
+
+        </div> <!-- /row -->
+
+        <!--
+        <div id="xkcd" class="container" class="center-block" style="align:center;margin:80 auto;">
+            <img class="img-responsive center-block"  src="http://imgs.xkcd.com/comics/recipes.png"   alt="CS dinner" width="760" height="545"> 
+        </div>
+        -->
+
+
+        <br><br><br><br><br>
+
+    </div> <!-- /container full -->
+
+    <div class="container" id="result">
+
+
+
+        <div id="info-row" class="row" style="display:none">
+
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" Style="text-align:center" ><h2 id="title"></h2></div>
+                    <div class="panel-body" Style="text-align:center" >
+
+                        <h2 >Ingredients</h2>
+                        <p id="ingredients" ></p>
+                        <h2>Method</h2>
+                        <p id="method"></p>
+                    </div>
+                </div>
+
+
             </div>
-          </form>
-
-	<form class="col-lg-1">
-              <span class="input-group-btn"><button class="btn btn-primary btn-lg" type="button">   OK   </button></span>
-
-
-        </form>
-        
-        </div>
-		
-	</div>  
-  
-	<div class="row">
-		<div class="center-block" style="width:500px;text-align:center; margin:20 auto;">
-	       		<div id="slider-tooltip">
-		</div>
-	</div>  
-  
-      </div> <!-- /row -->
-  
-	<div class="container" class="center-block" style="align:center;margin:80 auto;">
-          <img class="img-responsive center-block"  src="http://imgs.xkcd.com/comics/recipes.png"   alt="CS dinner" width="760" height="545"> 
-	</div>
 
 
 
-
-  	<br><br><br><br><br>
-
-</div> <!-- /container full -->
-
-<div class="container" id="result">
-  
-  
-  
-  	<div id="info-row" class="row" style="display:none">
-       
-      	<div class="col-md-12">
-        	<div class="panel panel-default">
-            <div class="panel-heading" Style="text-align:center" ><h2 id="title"></h2></div>
-            <div class="panel-body" Style="text-align:center" >
-
-		<h2 >Ingredients</h2>
-		<p id="ingredients" ></p>
-		<h2>Method</h2>
-		<p id="method"></p>
-          </div>
-        </div>
-
- 
-</div>
-
-
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="/static/js/nouislider.js"></script>
-<script src="/static/js/typed.js"></script>
-<script src="/static/js/slider.js"></script>
-<script src="/static/js/script.js"></script>
-</body>
-</html>
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+            <script src="/static/js/nouislider.js"></script>
+            <script src="/static/js/typed.js"></script>
+            <script src="/static/js/slider.js"></script>
+            <script src="/static/js/script.js"></script>
+            </body>
+            </html>
 
 
