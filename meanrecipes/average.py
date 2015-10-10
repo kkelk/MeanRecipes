@@ -25,7 +25,7 @@ def ingredient_scale(a, n):
     Multiply the ingredient a by the scalar n.
     '''
     quantity, unit, name = a
-    return (quantity * n, unit, name)
+    return (quantity * n if quantity is not None else quantity, unit, name)
 
 # The additive identity ingredient.
 def ingredient_zero(unit):
