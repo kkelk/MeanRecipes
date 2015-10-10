@@ -150,7 +150,7 @@ def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
 def average(intermediates, working_average, **kw):
     # The actual average function is the composition of all the passes, but we
     # ignore the intermediates that are left over.
-    compose = functools.partial(functools.reduce, lambda f, g: lambda *a: g(*f(*a, **kw), **kw))
+    compose = functools.partial(functools.reduce, lambda f, g: lambda *a, **kw: g(*f(*a, **kw), **kw))
     the_map = compose([
                 convert_units,
                 remove_suspicious_units,
