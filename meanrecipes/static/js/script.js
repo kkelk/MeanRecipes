@@ -19,6 +19,8 @@ function get_recipe(title) {
                 $('#ingredients').empty();
                 $('#method').empty();
 
+		$('html,body').css('overflow-y', 'visible');
+
                 $('#info-row').show();
 
                 $('#title').text("Recipe for " + data.title);
@@ -29,10 +31,11 @@ function get_recipe(title) {
                     $('#method').append('<li>' + data.method[i] + '</li>');
                 }
 
-                target = $('#ingredients');
+                target = $('#result');
                 $('html,body').animate({
                     scrollTop: target.offset().top
                 }, 1000);
+		document.getElementById('image').style.display = "none";
                 //document.getElementById('result').scrollIntoView();
             }
          );
