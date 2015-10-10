@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import warnings
+import re, unicodedata, warnings
 
 class Recipe:
     '''
@@ -45,8 +45,16 @@ class RecipeSource:
 def parse_number(text):
     '''
     Parses integers and rational numbers into floats from a string containing
-    them either whole, expressed as a fraction, or by their decimal expansion.
+    them either whole, expressed as:
+        - a Unicode combined fraction character
+        - a fraction of the form A '/' B
+        - a decimal expansion
     '''
+
+    # Get rid of bothersome Unicode characters
+    # (On the LHS of the replace, we have a U+2044 FRACTION SLASH)
+    text = unicodedata.normalize('NFKC', text).replace('⁄', '/')
+
     if '/' in text:
         numerator, denominator = text.split('/')
         return float(numerator) / float(denominator)
@@ -61,19 +69,23 @@ def parse_ingredient(text):
 
     We expect to find things approximating the following 'grammar':
         <ingredient> ::= (<quantity> <whitespace>* <unit>)? <whitespace>* <name>
-        <quantity> ::= [0-9./]+
+        <quantity> ::= {0, 1, ..., 9, ., /} \cup (Unicode fraction characters)
         <unit> ::= [a-zA-Z]+
         <name> ::= .*
 
     Basically, everything ends up in name if we can't find a quantity.
     '''
 
+    # Before we parse, remove extraneous things in brackets
+    text = re.sub('(\\([^)]*\\))', '', text)
+
     i = 0
     quantity_token = ''
     unit_token = ''
 
     # Read in any numerical prefix
-    while i < len(text) and (text[i].isdigit() or text[i] in './'):
+    is_numeric = lambda c: c.isdigit() or unicodedata.category(c) == 'No'
+    while i < len(text) and (is_numeric(text[i]) or text[i] in './'):
         quantity_token += text[i]
         i += 1
 
