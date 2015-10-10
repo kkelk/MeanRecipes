@@ -2,8 +2,8 @@
     "title": "{{title}}",
 
     "ingredients": [
-        {% for ingredient in ingredients %}
-        [{{ingredient[0]}}, "{{ingredient[1]}}", "{{ingredient[2]}}"] {% if not loop.last %},{% endif %}
+        {% for amount, unit, ingredient in ingredients %}
+        [{{amount}}, "{{unit}}", "{{ingredient}}"] {% if not loop.last %},{% endif %}
         {% endfor %}
     ],
 
