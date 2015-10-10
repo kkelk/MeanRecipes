@@ -8,39 +8,20 @@
 <body>
 <div class="container-full">
 
-    <div data-spy="affix">
-        <div class="row">
-
-            <div class="col-lg-12 text-center v-center">
-
-                <h1>Mean Recipes</h1>
+	<div data-spy="affix" class="col-lg-4 col-lg-offset-4 text-center v-center">
+        <h1>Mean Recipes</h1>
                 <p class="lead">The absolutely average recipe generator</p>
 
                 <p>Want to make some mean <strong><span class="text-info" id="suggestions"></span></strong>?</p>
 
-                <form id="recipe-form" class="col-lg-7">
-                    <div class="input-group" id="recipesearch" style="width:960px;text-align:center;margin:0 auto;">
-                        <input autofocus id="recipe-title" class="form-control input-lg" title="recipe search" placeholder="Enter a recipe" type="text">
-                        <span class="input-group-btn">
-                            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />
-
-                        </div>
-                    </form>
-                    <form class="col-lg-1">
-                        <div class="input-group" style="width:140px;text-align:center;margin:0 auto;">
-                            <input class="form-control input-lg" title="recipe search" placeholder="serving size" type="number">
-                        </div>
-                    </form>
-
-                    <form class="col-lg-1">
-                        <span class="input-group-btn"><button class="btn btn-primary btn-lg" type="button">   OK   </button></span>
-
-
-                    </form>
-
-                </div>
-
-            </div>  
+	<div class="row">
+	<form id="recipe-form">
+		<div class="form-group">
+			<input autofocus type="text" class="form-control input-lg" id="recipe-title" placeholder="What would you like to cook?">
+		</div>
+		<input type="submit" style="position: absolute; left: -999px; width; 1px; height: 1px;" tabindex="-1" />
+	</form>
+	</div>
 
 	<br><br>
             <div class="row">
@@ -48,20 +29,15 @@
                     <div id="slider-tooltip">
                     </div>
                 </div>
-            </div>
-
-        </div> <!-- /row -->
-
- 
-        <div id="image" class="container" class="center-block" style="align:center;margin:450 auto;">
-            <img class="img-responsive center-block"  src="http://imgs.xkcd.com/comics/recipes.png"   alt="CS dinner" width="760" height="545"> 
         </div>
 
+        <div id="image" class="container center-block" style="align:center auto;">
+            <img class="img-responsive center-block"  src="http://imgs.xkcd.com/comics/recipes.png"   alt="CS dinner" width="760" height="545"> 
+        </div>
+       <br><br><br><br><br>
+	</div>
 
-
-        <br><br><br><br><br>
-
-    </div> <!-- /container full -->
+</div> <!-- /container full -->
 
     <div class="container" id="result">
 
@@ -83,8 +59,6 @@
 
 
             </div>
-
-
 
             <!-- Latest compiled and minified JavaScript -->
             <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
