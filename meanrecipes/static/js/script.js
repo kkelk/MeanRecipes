@@ -14,8 +14,11 @@ $('#recipe-form').submit(function() {
 
 function get_recipe(title) {
     var url = '/recipe/search/' + title;
-    $.get(url,
-            function(data) {
+    $.ajax({
+	url: url,
+	type: "GET",
+	data: {'silliness': value},
+	success: function(data) {
                 $('#ingredients').empty();
                 $('#method').empty();
 
@@ -38,5 +41,5 @@ function get_recipe(title) {
 		document.getElementById('image').style.display = "none";
                 //document.getElementById('result').scrollIntoView();
             }
-         );
+         });
 }
