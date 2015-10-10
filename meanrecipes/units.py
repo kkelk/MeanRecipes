@@ -4,12 +4,17 @@
 This module contains various data tables for converting and normalising units.
 '''
 
-NORMALISATIONS = {
-    'tablespoons': 'tbsp',
-    'tablespoon': 'tbsp',
-    'teaspoons': 'tsp',
-    'teaspoon': 'tsp',
-    'tubs': 'tub',
+# An entry:
+#   A: (B, n)
+# means convert a value of x in units A to a value of nx in units B
+CONVERSIONS = {
+    'tablespoons': ('tbsp', 1),
+    'tablespoon': ('tbsp', 1),
+    'teaspoons': ('tsp', 1),
+    'teaspoon': ('tsp', 1),
+    'tubs': ('tub', 1),
+    'kg': ('g', 1000.0),
+    'l': ('ml', 1000.0),
 }
 
 ALLOWED_UNITS = (
@@ -20,30 +25,32 @@ ALLOWED_UNITS = (
     'punnet',
     'pot',
     'tub',
-    'ml',
-    'l'
+    'ml'
 )
 
 
 
-def normalise_unit(name):
+def convert_ingredient(ingredient):
     '''
     This function normalises the representation of certain units, e.g.
     "tablespoons" → "tbsp", to make sure that we can convert them properly.
     There are three normalisations:
         - conversion to lowercase
-        - applying rewrite rules as described above
+        - applying rewrite rules as described above, with optional scale
+          factors --- this means we can perform unit conversions as well
         - (crude) depluralisation
     '''
-    name = name.lower()
+    quantity, unit, name = ingredient
+
+    unit = unit.lower()
     previous = ''
 
-    while name != previous:
-        previous = name
-        name = NORMALISATIONS.get(name, name)
+    while unit != previous:
+        previous = unit
+        unit, factor = CONVERSIONS.get(unit, (unit, 1))
+        quantity *= factor
 
     if name.endswith('s'):
         name = name[:-1]
 
-    return name
-
+    return (quantity, unit, name)

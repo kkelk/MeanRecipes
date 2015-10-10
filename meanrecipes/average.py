@@ -4,7 +4,7 @@
 
 import functools, warnings
 from meanrecipes.recipe import Recipe
-from meanrecipes.units import ALLOWED_UNITS, normalise_unit
+from meanrecipes.units import ALLOWED_UNITS, convert_ingredient
 
 def ingredient_sum(a, b):
     '''
@@ -33,13 +33,12 @@ def ingredient_zero(unit):
 
 
 
-def normalise_units(intermediates, average):
+def convert_units(intermediates, average):
     '''
     This pass normalises units according to the rules in units.py.
     '''
     for intermediate in intermediates:
-        intermediate.ingredients = [(quantity, normalise_unit(unit), name)
-                                    for quantity, unit, name in intermediate.ingredients]
+        intermediate.ingredients = map(convert_ingredient, intermediate.ingredients)
 
     return intermediates, average
 
@@ -108,7 +107,7 @@ def average(intermediates, working_average):
     # The actual average function is the composition of all the passes, but we
     # ignore the intermediates that are left over.
     the_map = compose([
-                normalise_units,
+                convert_units,
                 remove_suspicious_units,
                 take_mean_of_all_ingredients
               ])
