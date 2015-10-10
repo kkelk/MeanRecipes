@@ -41,4 +41,58 @@ class RecipeSource:
         raise NotImplemented()
 
 
+def parse_ingredient(text):
+    '''
+    Attempts to parse a human-readable description of an ingredient, e.g.
+        250g butter
+    into a 3-tuple (quantity, unit, name).
 
+    We expect to find things approximating the following 'grammar':
+        <ingredient> ::= (<quantity> <whitespace>* <unit>)? <whitespace>* <name>
+        <quantity> ::= [0-9.]+
+        <unit> ::= [a-zA-Z]+
+        <name> ::= .*
+
+    Basically, everything ends up in name if we can't find a quantity.
+    '''
+
+    i = 0
+    quantity_token = ''
+    unit_token = ''
+
+    # Read in any numerical prefix
+    while i < len(text) and (text[i].isdigit() or text[i] == '.'):
+        quantity_token += text[i]
+        i += 1
+
+    # Skip spaces...
+    while i < len(text) and text[i].isspace():
+        i += 1
+
+    # If we have a quantity, we might have a unit
+    if len(quantity_token) > 0:
+        while i < len(text) and not text[i].isspace():
+            unit_token += text[i]
+            i += 1
+
+    # Skip spaces...
+    while i < len(text) and text[i].isspace():
+        i += 1
+
+    # And keep the rest as the name
+    name = text[i:]
+
+    # Now recover the rest of the fields:
+    unit = unit_token
+
+    # Parse the quantity as a number
+    try:
+        quantity = float(quantity_token)
+    except ValueError:
+        # XXX this is probably not what we want to do
+        warnings.warn('Failed to parse a quantity as a number: %s' % quantity_token)
+        quantity = None
+        unit = ''
+
+
+    return (quantity, unit, name)
