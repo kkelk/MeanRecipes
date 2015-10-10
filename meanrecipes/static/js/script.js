@@ -32,8 +32,11 @@ function format_ingredient(ingredient) {
 
 function get_recipe(title) {
     var url = '/recipe/search/' + title;
-    $.get(url,
-            function(data) {
+    $.ajax({
+	url: url,
+	type: "GET",
+	data: {'silliness': value},
+	success: function(data) {
                 $('#ingredients').empty();
                 $('#method').empty();
 
@@ -55,7 +58,6 @@ function get_recipe(title) {
                     scrollTop: target.offset().top
                 }, 1000);
                 document.getElementById('image').style.display = "none";
-                //document.getElementById('result').scrollIntoView();
             }
-    );
+    });
 }
