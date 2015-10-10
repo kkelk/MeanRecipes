@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-import warnings
+import re, unicodedata, warnings
+from meanrecipes.units import ALLOWED_UNITS
 
 class Recipe:
     '''
@@ -45,8 +46,16 @@ class RecipeSource:
 def parse_number(text):
     '''
     Parses integers and rational numbers into floats from a string containing
-    them either whole, expressed as a fraction, or by their decimal expansion.
+    them either whole, expressed as:
+        - a Unicode combined fraction character
+        - a fraction of the form A '/' B
+        - a decimal expansion
     '''
+
+    # Get rid of bothersome Unicode characters
+    # (On the LHS of the replace, we have a U+2044 FRACTION SLASH)
+    text = unicodedata.normalize('NFKC', text).replace('⁄', '/')
+
     if '/' in text:
         numerator, denominator = text.split('/')
         return float(numerator) / float(denominator)
@@ -60,20 +69,25 @@ def parse_ingredient(text):
     into a 3-tuple (quantity, unit, name).
 
     We expect to find things approximating the following 'grammar':
-        <ingredient> ::= (<quantity> <whitespace>* <unit>)? <whitespace>* <name>
-        <quantity> ::= [0-9./]+
+        <ingredient> ::= (<quantity> <whitespace>* <unit>)? <whitespace>* <name> ([,-] .*)?
+        <quantity> ::= {0, 1, ..., 9, ., /} \cup (Unicode fraction characters)
         <unit> ::= [a-zA-Z]+
         <name> ::= .*
 
     Basically, everything ends up in name if we can't find a quantity.
     '''
 
+    # Before we parse, remove extraneous things in brackets
+    text = re.sub('(\\([^)]*\\))', '', text)
+
     i = 0
     quantity_token = ''
     unit_token = ''
+    name_token = ''
 
     # Read in any numerical prefix
-    while i < len(text) and (text[i].isdigit() or text[i] in './'):
+    is_numeric = lambda c: c.isdigit() or unicodedata.category(c) == 'No'
+    while i < len(text) and (is_numeric(text[i]) or text[i] in './'):
         quantity_token += text[i]
         i += 1
 
@@ -83,7 +97,7 @@ def parse_ingredient(text):
 
     # If we have a quantity, we might have a unit
     if len(quantity_token) > 0:
-        while i < len(text) and not text[i].isspace():
+        while i < len(text) and text[i].isalpha():
             unit_token += text[i]
             i += 1
 
@@ -91,11 +105,14 @@ def parse_ingredient(text):
     while i < len(text) and text[i].isspace():
         i += 1
 
-    # And keep the rest as the name
-    name = text[i:]
+    # And keep the rest as the name, until we run into anything we don't like
+    while i < len(text) and text[i] not in ',-':
+        name_token += text[i]
+        i += 1
 
     # Now recover the rest of the fields:
     unit = unit_token
+    name = name_token
 
     # Parse the quantity as a number
     try:
@@ -105,6 +122,5 @@ def parse_ingredient(text):
         warnings.warn('Failed to parse a quantity as a number: %s' % quantity_token)
         quantity = None
         unit = ''
-
 
     return (quantity, unit, name)
