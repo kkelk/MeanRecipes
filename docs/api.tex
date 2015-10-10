@@ -1,0 +1,62 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{geometry}
+\usepackage{parskip}
+
+\title{API Documentation}
+\author{}
+\date{}
+
+\newcommand{\meth}[1]{\textbf{#1}}
+\newcommand{\apiendpoint}[3]{%
+	\subsection{\texttt{#2}}%
+	\framebox[\textwidth][l]{%
+		\meth{#1} \parbox[t]{\textwidth}{%
+			\texttt{#2}%
+			\par%
+			#3
+		}%
+	}%
+}
+\newcommand{\param}[1]{\texttt{\emph{#1}}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+
+
+\section{Endpoints}
+
+\apiendpoint{POST}{/recipe/search/\param{term}/}{
+	Compiles an average recipe for the foodstuff, \param{term}.
+}
+
+This method takes an optional \meth{GET} parameter, \param{silliness}. This is a number in the range 0--100 which specifies how silly the recipe should be.
+
+It returns a JSON response describing a recipe, with the following schema:
+
+\begin{verbatim}
+{
+    "title": "Recipe",
+
+    "ingredients": [
+        [300.0, "g", "flour"], 
+        ...
+    ],
+
+    "method": [
+        "Step 1",
+        "Step 2",
+        ...
+    ]
+}
+\end{verbatim}
+
+The \texttt{ingredients} field is a list of arrays of the form \verb![quantity, unit, name]!. The quantities returned are \emph{per person} --- that is, the recipe is written to serve one person.
+
+The \texttt{method} field is an ordered list of steps in the recipe.
+
+\end{document}
