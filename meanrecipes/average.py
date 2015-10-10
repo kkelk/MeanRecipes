@@ -122,7 +122,7 @@ def union_methods(intermediates, average, **kw):
                                  new_method)
 
 
-def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
+def cull_similar_methods(intermediates, average, threshold = 0.05, **kw):
     '''
     This pass removes adjacent method steps that are very similar to each
     other, to avoid repetitiveness.
@@ -174,6 +174,11 @@ def cull_rare_ingredients(intermediates, average, silliness = 0, **kw):
         for _, _, name in removed_ingredients:
             if name not in step:
                 have_seen_banned = True
+                break
+
+        for _, _, name in new_ingredients:
+            if name in step:
+                have_seen_banned = False
                 break
 
         if not have_seen_banned:

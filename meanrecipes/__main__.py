@@ -15,7 +15,7 @@ def recipe(term=None):
     source = AllRecipesSource()
     intermediates = list(source.search(term))
     working = Recipe(term, [], [])
-    recipe = average(intermediates, working, silliness=float(silliness))
+    recipe = average(intermediates, working, silliness=float(silliness) / 100)
 
     resp = make_response(render_template('recipe.json', title=recipe.title, ingredients=recipe.ingredients, method=recipe.method))
     resp.mimetype = 'application/json'
