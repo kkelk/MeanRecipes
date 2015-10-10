@@ -10,8 +10,9 @@ class Recipe:
       * ingredients
         An iterable of tuples (quantity, unit, name) describing the ingredients
         used in the recipe. Here, quantity is a float representing the amount
-        of the ingredient used when the recipe is adjusted to serve one person.
-        The values 'unit' and 'name' are strings.
+        of the ingredient used when the recipe is adjusted to serve one person,
+        or None if no particular quantity is specified.  The values 'unit' and
+        'name' are strings.
 
       * method
         A list of strings describing the steps in the recipe.

@@ -55,7 +55,7 @@ It returns a JSON response describing a recipe, with the following schema:
 }
 \end{verbatim}
 
-The \texttt{ingredients} field is a list of arrays of the form \verb![quantity, unit, name]!. The quantities returned are \emph{per person} --- that is, the recipe is written to serve one person.
+The \texttt{ingredients} field is a list of arrays of the form \verb![quantity, unit, name]!. The quantities returned are \emph{per person} --- that is, the recipe is written to serve one person. The \texttt{quantity} field may have the value \texttt{null}, indicating that no particular quantity of the ingredient is specified.
 
 The \texttt{method} field is an ordered list of steps in the recipe.
 
