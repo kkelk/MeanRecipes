@@ -19,7 +19,7 @@ function get_recipe(title) {
                 $('#ingredients').empty();
                 $('#method').empty();
 
-		$('html,body').css('overflow-y', 'visible');
+                $('html,body').css('overflow-y', 'visible');
 
                 $('#info-row').show();
 
@@ -35,8 +35,8 @@ function get_recipe(title) {
                 $('html,body').animate({
                     scrollTop: target.offset().top
                 }, 1000);
-		document.getElementById('image').style.display = "none";
+                document.getElementById('image').style.display = "none";
                 //document.getElementById('result').scrollIntoView();
             }
-         );
+    );
 }
