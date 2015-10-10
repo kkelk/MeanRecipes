@@ -56,3 +56,10 @@ h1 {
 	display: block;
 	padding: 2px;
 }
+
+
+.align-left li a {
+  text-align: left;
+}
+
+
