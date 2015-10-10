@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+from meanrecipes.sources.allrecipes import AllRecipesSource
+import sys
+
+for title, url in AllRecipesSource()._site_search(sys.argv[1]):
+    recipe = AllRecipesSource()._fetch_recipe(url)
+    print('**************')
+    print(recipe.title)
+    print('-----')
+    print('\n'.join(repr(I) for I in recipe.ingredients))
+    print('-----')
+    print('\n'.join(repr(m) for m in recipe.method))
+    print('\n\n')

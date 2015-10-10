@@ -6,5 +6,7 @@ setup(
         packages = ['meanrecipes'],
         install_requires = [
             'flask',
+            'requests',
+            'beautifulsoup4',
         ]
 )
