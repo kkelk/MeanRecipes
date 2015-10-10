@@ -1,3 +1,11 @@
+$('#suggestions').typed({
+    strings: ["chocolate chip cookies", "brownies", "pancakes"],
+    typeSpeed: 50,
+    backSpeed: 15,
+    backDelay: 1500,
+    loop: true,
+});
+
 $('#recipe-form').submit(function() {
 	get_recipe($('#recipe-title').val());
 	return false;

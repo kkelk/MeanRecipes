@@ -3,7 +3,7 @@
 
     "ingredients": [
         {% for amount, unit, ingredient in ingredients %}
-        [{{amount}}, "{{unit}}", "{{ingredient}}"] {% if not loop.last %},{% endif %}
+        [{{amount}}, "{{unit}}", "{{ingredient}}"]{% if not loop.last %},{% endif %}
         {% endfor %}
     ],
 
