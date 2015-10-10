@@ -1,0 +1,15 @@
+{
+    "title": "{{title}}",
+
+    "ingredients": [
+        {% for ingredient in ingredients %}
+        [{{ingredient[0]}}, "{{ingredient[1]}}", "{{ingredient[2]}}"] {% if not loop.last %},{% endif %}
+        {% endfor %}
+    ],
+
+    "method": [
+        {% for step in method %}
+            "{{step}}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
