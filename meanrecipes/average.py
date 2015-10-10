@@ -25,7 +25,7 @@ def ingredient_scale(a, n):
     Multiply the ingredient a by the scalar n.
     '''
     quantity, unit, name = a
-    return (quantity * n if quantity is not None else quantity, unit, name)
+    return (quantity * n, unit, name)
 
 # The additive identity ingredient.
 def ingredient_zero(unit):
@@ -100,40 +100,6 @@ def take_mean_of_all_ingredients(intermediates, average):
                                  average.method)
 
 
-def union_methods(intermediates, average):
-    '''
-    This pass is the stupidest possible way of combining methods: we just
-    concatenate all the step 1s, then the step 2s, ..., the step ns.
-    '''
-
-    new_method = []
-    i = 0
-    
-    while True:
-        steps = [r.method[i] for r in intermediates if i < len(r.method)]
-        if len(steps) == 0:
-            break
-
-        new_method += steps
-        i += 1
-
-    return intermediates, Recipe(average.title,
-                                 average.ingredients,
-                                 new_method)
-
-
-def cull_similar_methods(intermediates, average):
-    '''
-    This pass removes adjacent method steps that are very similar to each
-    other, to avoid repetitiveness.
-
-    Here, we define a 'metric'
-    '''
-    new_method = []
-
-    for i in range(0, len(average.method)
-        if 
-
 
 compose = functools.partial(functools.reduce, lambda f, g: lambda *a: g(*f(*a)))
 
@@ -143,8 +109,7 @@ def average(intermediates, working_average):
     the_map = compose([
                 convert_units,
                 remove_suspicious_units,
-                take_mean_of_all_ingredients,
-                union_methods,
+                take_mean_of_all_ingredients
               ])
     _, result = the_map(intermediates, working_average)
     return result
