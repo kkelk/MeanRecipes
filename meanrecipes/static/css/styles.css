@@ -4,7 +4,7 @@ html,body {
 
 h1 {
   font-family: Arial,sans-serif
-  font-size:80px;
+  font-size:1000px;
   color:#DDCCEE;
 }
 
@@ -32,3 +32,7 @@ h1 {
   margin-top:7%;
 }
   
+#recipesearch {
+  padding-right: 0px;
+  padding-left: 410px;
+}
