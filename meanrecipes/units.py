@@ -12,12 +12,14 @@ NORMALISATIONS = {
     'tubs': 'tub',
 }
 
-ALLOWABLE_UNITS = (
+ALLOWED_UNITS = (
     'g',
     'tbsp',
     'tsp',
     'tin',
     'punnet',
+    'pot',
+    'tub',
     'ml',
     'l'
 )
@@ -40,7 +42,8 @@ def normalise_unit(name):
         previous = name
         name = NORMALISATIONS.get(name, name)
 
-    if name[-1] == 's':
+    if name.endswith('s'):
         name = name[:-1]
 
     return name
+

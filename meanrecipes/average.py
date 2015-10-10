@@ -4,7 +4,7 @@
 
 import functools, warnings
 from meanrecipes.recipe import Recipe
-from meanrecipes.units import normalise_unit
+from meanrecipes.units import ALLOWED_UNITS, normalise_unit
 
 def ingredient_sum(a, b):
     '''
@@ -15,7 +15,8 @@ def ingredient_sum(a, b):
     quantity_b, unit_b, _ = b
 
     if unit_a != unit_b:
-        warnings.warn('Undefined sum between incompatible units %s and %s' % (unit_a, unit_b))
+        warnings.warn('Attempted sum between incompatible units %s and %s' % (unit_a, unit_b))
+        return None
     
     return (quantity_a + quantity_b, unit_a, name)
 
@@ -43,6 +44,29 @@ def normalise_units(intermediates, average):
     return intermediates, average
 
 
+def remove_suspicious_units(intermediates, average):
+    '''
+    Even once we have the grammatical parsing, we consider some semantic
+    questions: what things actually make sense as units? There are surprisingly
+    few, certainly versus the cases where names of ingredients masquerade as
+    units. So if we come across a unit name that doesn't seem right, presume
+    we're dealing with a dimensionless quantity of a thing.
+    '''
+    for intermediate in intermediates:
+        new_ingredients = []
+
+        for quantity, unit, name in intermediate.ingredients:
+            if unit not in ALLOWED_UNITS:
+                name = (unit + ' ' + name).strip()
+                unit  = ''
+
+            new_ingredients.append((quantity, unit, name))
+
+        intermediate.ingredients = new_ingredients
+
+    return intermediates, average
+
+
 def take_mean_of_all_ingredients(intermediates, average):
     '''
     This pass adds every ingredient from the intermediates into the average,
@@ -50,16 +74,25 @@ def take_mean_of_all_ingredients(intermediates, average):
     '''
     totals = dict((r[2], r) for r in average.ingredients)
 
+    # The factor we scale by to take the mean
+    # (dividing by n + 1 since the input working average contributed)
+    factor = 1 / (len(intermediates) + 1)
+
     # Add up all the ingredient quantities
     for recipe in intermediates:
         for ingredient in recipe.ingredients:
             quantity, unit, name = ingredient
-            totals[name] = ingredient_sum(ingredient,
-                                          totals.get(name, ingredient_zero(unit)),)
+
+            total = ingredient_sum(ingredient,
+                                    totals.get(name, ingredient_zero(unit)),)
+
+            if total is None:
+                totals[name] = ingredient_scale(ingredient, 1 / factor)
+            else:
+                totals[name] = total
+
 
     # And scale them back down to get the mean
-    # (dividing by n + 1 since the input working average contributed)
-    factor = 1 / (len(intermediates) + 1)
     for name in totals.keys():
         totals[name] = ingredient_scale(totals[name], factor)
 
@@ -76,6 +109,7 @@ def average(intermediates, working_average):
     # ignore the intermediates that are left over.
     the_map = compose([
                 normalise_units,
+                remove_suspicious_units,
                 take_mean_of_all_ingredients
               ])
     _, result = the_map(intermediates, working_average)
