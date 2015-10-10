@@ -1,30 +1,27 @@
 var tooltipSlider = document.getElementById('slider-tooltip');
 
 noUiSlider.create(tooltipSlider, {
-	start: [50],
+	start: [60],
 	range: {
 		'min': 0,
 		'max': 100
 	}
 });
 
-var tipHandles = tooltipSlider.getElementsByClassName('noUi-handle'),
-	tooltips = [];
+var tipHandle = tooltipSlider.getElementsByClassName('noUi-handle')[0]
+var tooltip = [];
 
-// Add divs to the slider handles.
-for ( var i = 0; i < tipHandles.length; i++ ){
-	tooltips[i] = document.createElement('div');
-	tipHandles[i].appendChild(tooltips[i]);
-}
+tooltip = document.createElement('div');
+tipHandle.appendChild(tooltip);
 
 // Add a class for styling
-tooltips[1].className += 'tooltip';
+tooltip.className += 'tooltip-slider';
 // Add additional markup
-tooltips[1].innerHTML = '<strong>Value: </strong><span></span>';
+tooltip.innerHTML = '<strong>Consensus: </strong><span></span>';
 // Replace the tooltip reference with the span we just added
-tooltips[1] = tooltips[1].getElementsByTagName('span')[0];
+tooltip = tooltip.getElementsByTagName('span')[0];
 
 // When the slider changes, write the value to the tooltips.
 tooltipSlider.noUiSlider.on('update', function( values, handle ){
-	tooltips[handle].innerHTML = values[handle];
+	tooltip.innerHTML = Math.round(values[handle]);
 });
