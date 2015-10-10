@@ -12,6 +12,24 @@ $('#recipe-form').submit(function() {
     return false;
 });
 
+function format_ingredient(ingredient) {
+	var quantity = ingredient[0];
+	var unit = ingredient[1];
+	var description = ingredient[2];
+
+	if (quantity) {
+		quantity = quantity.toFixed(2);
+	}
+	else {
+		quantity = "";
+	}
+
+	if (!unit) {
+		unit = "";
+	}
+	return [quantity, unit, description].join(' ');
+}
+
 function get_recipe(title) {
     var url = '/recipe/search/' + title;
     $.get(url,
@@ -25,7 +43,8 @@ function get_recipe(title) {
 
                 $('#title').text("Recipe for " + data.title);
                 for (i = 0; i < data.ingredients.length; i++) {
-                    $('#ingredients').append('<li>' + data.ingredients[i][0] + data.ingredients[i][1] + " " + data.ingredients[i][2] + '</li>');
+		    var string = format_ingredient(data.ingredients[i]);
+                    $('#ingredients').append('<li>' + string + '</li>');
                 }
                 for (i = 0; i < data.method.length; i++) {
                     $('#method').append('<li>' + data.method[i] + '</li>');

@@ -17,7 +17,7 @@ tipHandle.appendChild(tooltip);
 // Add a class for styling
 tooltip.className += 'tooltip-slider';
 // Add additional markup
-tooltip.innerHTML = '<strong>Consensus: </strong><span></span>';
+tooltip.innerHTML = '<strong>Silliness: </strong><span></span>';
 // Replace the tooltip reference with the span we just added
 tooltip = tooltip.getElementsByTagName('span')[0];
 
