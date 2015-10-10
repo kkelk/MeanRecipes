@@ -141,10 +141,45 @@ def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
         B = set(average.method[i + 1].split(' ')[:m])
         d = len(A.intersection(B)) / m
 
+        print('d = ' + str(d))
         if d < threshold:
             new_method.append(average.method[i])
 
     return intermediates, Recipe(average.title, average.ingredients, new_method)
+
+
+def cull_rare_ingredients(intermediates, average, silliness = 0, **kw):
+    new_ingredients = []
+    removed_ingredients = []
+    new_method = []
+
+    for ingredient in average.ingredients:
+        _, _, ingredient_name = ingredient
+        hits = 0
+
+        for intermediate in intermediates:
+            for _, _, intermediate_name in intermediate.ingredients:
+                if intermediate_name == ingredient_name:
+                    hits += 1
+                    break
+
+        consensus = hits / len(intermediates)
+        if consensus <= silliness:
+            new_ingredients.append(ingredient)
+        else:
+            removed_ingredients.append(ingredient)
+
+    for step in average.method:
+        have_seen_banned = False
+        for _, _, name in removed_ingredients:
+            if name not in step:
+                have_seen_banned = True
+                break
+
+        if not have_seen_banned:
+            new_method.append(step)
+
+    return intermediates, Recipe(average.title, new_ingredients, new_method)
 
 
 def average(intermediates, working_average, **kw):
@@ -157,6 +192,7 @@ def average(intermediates, working_average, **kw):
                 take_mean_of_all_ingredients,
                 union_methods,
                 cull_similar_methods,
+                cull_rare_ingredients,
               ])
     _, result = the_map(intermediates, working_average, **kw)
     return result
