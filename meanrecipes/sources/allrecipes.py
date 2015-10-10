@@ -15,8 +15,7 @@ class AllRecipesSource(RecipeSource):
     def _site_search(self, term):
         '''
         Search the AllRecipes site for recipes matching a given search term,
-        returning an iterator over tuples (title, url), where title is the title
-        of the recipe and url is a URL containing the full recipe content.
+        returning an iterator over URLs containing the full recipe content.
         '''
         response = requests.get(self.SEARCH_URL % term)
         document = BeautifulSoup(response.text, 'html.parser')
@@ -30,7 +29,7 @@ class AllRecipesSource(RecipeSource):
 
             if len(link_matches) > 0:
                 link = link_matches[0]
-                yield (link.string.strip(), link['href'])
+                yield link['href']
         
     def _fetch_recipe(self, url):
         '''
@@ -56,3 +55,8 @@ class AllRecipesSource(RecipeSource):
 
         return Recipe(title, ingredients, method)
 
+
+    def search(self, term):
+        # We just plug the two methods above together
+        return map(self._fetch_recipe, self._site_search(term))
+        
