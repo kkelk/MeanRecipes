@@ -10,6 +10,7 @@ noUiSlider.create(tooltipSlider, {
 
 var tipHandle = tooltipSlider.getElementsByClassName('noUi-handle')[0]
 var tooltip = [];
+var value;
 
 tooltip = document.createElement('div');
 tipHandle.appendChild(tooltip);
@@ -23,5 +24,6 @@ tooltip = tooltip.getElementsByTagName('span')[0];
 
 // When the slider changes, write the value to the tooltips.
 tooltipSlider.noUiSlider.on('update', function( values, handle ){
-	tooltip.innerHTML = Math.round(values[handle]);
+	value = Math.round(values[handle]);
+	tooltip.innerHTML = value;
 });
