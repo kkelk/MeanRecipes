@@ -42,6 +42,17 @@ class RecipeSource:
         raise NotImplemented()
 
 
+def parse_number(text):
+    '''
+    Parses integers and rational numbers into floats from a string containing
+    them either whole, expressed as a fraction, or by their decimal expansion.
+    '''
+    if '/' in text:
+        numerator, denominator = text.split('/')
+        return float(numerator) / float(denominator)
+    else:
+        return float(text)
+
 def parse_ingredient(text):
     '''
     Attempts to parse a human-readable description of an ingredient, e.g.
@@ -50,7 +61,7 @@ def parse_ingredient(text):
 
     We expect to find things approximating the following 'grammar':
         <ingredient> ::= (<quantity> <whitespace>* <unit>)? <whitespace>* <name>
-        <quantity> ::= [0-9.]+
+        <quantity> ::= [0-9./]+
         <unit> ::= [a-zA-Z]+
         <name> ::= .*
 
@@ -62,7 +73,7 @@ def parse_ingredient(text):
     unit_token = ''
 
     # Read in any numerical prefix
-    while i < len(text) and (text[i].isdigit() or text[i] == '.'):
+    while i < len(text) and (text[i].isdigit() or text[i] in './'):
         quantity_token += text[i]
         i += 1
 
@@ -88,9 +99,9 @@ def parse_ingredient(text):
 
     # Parse the quantity as a number
     try:
-        quantity = float(quantity_token)
+        quantity = parse_number(quantity_token)
     except ValueError:
-        # XXX this is probably not what we want to do
+        # This also handles, perhaps unwisely, the case where quantity_token is empty
         warnings.warn('Failed to parse a quantity as a number: %s' % quantity_token)
         quantity = None
         unit = ''
