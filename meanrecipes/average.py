@@ -14,7 +14,7 @@ def ingredient_sum(a, b):
     quantity_a, unit_a, name = a
     quantity_b, unit_b, _ = b
 
-    if unit_a != unit_b:
+    if unit_a != unit_b or quantity_a is None or quantity_b is None:
         warnings.warn('Attempted sum between incompatible units %s and %s' % (unit_a, unit_b))
         return None
     
