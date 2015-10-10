@@ -1,5 +1,5 @@
 #!/bin/bash
 pyvenv ~/mrvenv
-echo 'export PATH=~/mrvenv:$PATH' >> ~/.profile
+echo 'export PATH=~/mrvenv/bin:$PATH' >> ~/.profile
 ~/mrvenv/bin/python setup.py install
 echo -e '\x1B[1mRestart your shell, please.\x1B[0m'
