@@ -1,5 +1,5 @@
 $('#suggestions').typed({
-    strings: ["chocolate chip cookies", "brownies", "pancakes"],
+    strings: ["chocolate chip cookies", "brownies", "pancakes", "pizza", "cheesecake", "lasagna", "korma", "ice cream", "sandwich", "spaghetti"],
     typeSpeed: 50,
     backSpeed: 15,
     backDelay: 1500,

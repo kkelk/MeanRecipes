@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, url_for, render_template, make_response
+from flask import Flask, url_for, render_template, make_response, request
 from recipe import Recipe
 from sources.allrecipes import AllRecipesSource
 from average import average
@@ -11,6 +11,7 @@ def index():
 
 @app.route('/recipe/search/<term>')
 def recipe(term=None):
+    silliness = request.args.get('silliness', 50)
     source = AllRecipesSource()
     intermediates = list(source.search(term))
     working = Recipe(term, [], [])
