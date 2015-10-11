@@ -141,7 +141,6 @@ def cull_similar_methods(intermediates, average, threshold = 0.05, **kw):
         B = set(average.method[i + 1].split(' ')[:m])
         d = len(A.intersection(B)) / m
 
-        print('d = ' + str(d))
         if d < threshold:
             new_method.append(average.method[i])
 
