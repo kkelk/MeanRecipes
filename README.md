@@ -16,7 +16,7 @@ Usage Instructions
 
 For convenience, if you are running in Computer Science in St Andrews, a bash script has been provided to generate a convenient virtual environment in your school home directory, and to default to the correct Python version. To use this, simply clone the directory and execute the `setup` script (`./setup`). Otherwise, simply run `python setup.py install`. You might also want to add `python setup.py develop`.
 
-Once the appropriate packages are installed, it should be possible to start the server by simply executing `python meanrecipes` from within the project root directory. Following this, pointing a browser at [localhost:5000](localhost:5000) should work.
+Once the appropriate packages are installed, it should be possible to start the server by simply executing `python meanrecipes` from within the project root directory. Following this, pointing a browser at [localhost:5000](http://localhost:5000) should work.
 
 Known Issues
 ============
