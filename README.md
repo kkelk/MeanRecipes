@@ -22,4 +22,10 @@ Known Issues
 ============
 * Portion sizes are not taken into consideration &mdash; if a found recipe produces more, then its ingredients will be more heavily weighted in the output than they should be.
 * The produced portion size is not calculated or displayed. We originally intended this to be adjustable, so that any recipe could be scaled to any number of people.
+* Plurals are naïvely assumed to always simply be appending an 's'. As a result, ingredients lists have been noted to include elements such as "strawberrie" and even "asparagu".
+* Our parser is fairly simple, and often messes up when splitting quantities, units and the ingredient description.
+* Only a small, hard-coded list of quantity conversions are supported &mdash; we're likely to deal poorly with recipes that use units we haven't explicitly considered.
+* Unicode fractions in ingredient quantities are only sometimes dealt with correctly.
+* The produced methods aren't averaged particularly well like the ingredients are. We don't particularly know what it means to average natural language like that, but it sounds fun to try sometime.
+* No indicator is given while the request is being processed (which is pretty slow). The server might have died, or the recipe could just have a lot of results.
 * General hackathon-quality code, and a number of random crashes, display glitches and empty recipes.
