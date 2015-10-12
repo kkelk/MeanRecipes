@@ -8,6 +8,8 @@ This module contains various data tables for converting and normalising units.
 #   A: (B, n)
 # means convert a value of x in units A to a value of nx in units B
 CONVERSIONS = {
+    'desert spoons': ('tsp', 2.4),
+    'desert spoon': ('tsp', 2.4),
     'tablespoons': ('tbsp', 1),
     'tablespoon': ('tbsp', 1),
     'teaspoons': ('tsp', 1),

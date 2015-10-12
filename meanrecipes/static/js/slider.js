@@ -11,17 +11,20 @@ noUiSlider.create(tooltipSlider, {
 var tipHandle = tooltipSlider.getElementsByClassName('noUi-handle')[0]
 var tooltip = [];
 
+var value;
+
 tooltip = document.createElement('div');
 tipHandle.appendChild(tooltip);
 
 // Add a class for styling
 tooltip.className += 'tooltip-slider';
 // Add additional markup
-tooltip.innerHTML = '<strong>Consensus: </strong><span></span>';
+tooltip.innerHTML = '<strong>Silliness: </strong><span></span>';
 // Replace the tooltip reference with the span we just added
 tooltip = tooltip.getElementsByTagName('span')[0];
 
 // When the slider changes, write the value to the tooltips.
 tooltipSlider.noUiSlider.on('update', function( values, handle ){
-	tooltip.innerHTML = Math.round(values[handle]);
+	value = Math.round(values[handle]);
+	tooltip.innerHTML = value;
 });

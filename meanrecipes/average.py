@@ -122,7 +122,7 @@ def union_methods(intermediates, average, **kw):
                                  new_method)
 
 
-def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
+def cull_similar_methods(intermediates, average, threshold = 0.05, **kw):
     '''
     This pass removes adjacent method steps that are very similar to each
     other, to avoid repetitiveness.
@@ -147,6 +147,45 @@ def cull_similar_methods(intermediates, average, threshold = 0.75, **kw):
     return intermediates, Recipe(average.title, average.ingredients, new_method)
 
 
+def cull_rare_ingredients(intermediates, average, silliness = 0, **kw):
+    new_ingredients = []
+    removed_ingredients = []
+    new_method = []
+
+    for ingredient in average.ingredients:
+        _, _, ingredient_name = ingredient
+        hits = 0
+
+        for intermediate in intermediates:
+            for _, _, intermediate_name in intermediate.ingredients:
+                if intermediate_name == ingredient_name:
+                    hits += 1
+                    break
+
+        consensus = hits / len(intermediates)
+        if consensus <= silliness:
+            new_ingredients.append(ingredient)
+        else:
+            removed_ingredients.append(ingredient)
+
+    for step in average.method:
+        have_seen_banned = False
+        for _, _, name in removed_ingredients:
+            if name not in step:
+                have_seen_banned = True
+                break
+
+        for _, _, name in new_ingredients:
+            if name in step:
+                have_seen_banned = False
+                break
+
+        if not have_seen_banned:
+            new_method.append(step)
+
+    return intermediates, Recipe(average.title, new_ingredients, new_method)
+
+
 def average(intermediates, working_average, **kw):
     # The actual average function is the composition of all the passes, but we
     # ignore the intermediates that are left over.
@@ -157,6 +196,7 @@ def average(intermediates, working_average, **kw):
                 take_mean_of_all_ingredients,
                 union_methods,
                 cull_similar_methods,
+                cull_rare_ingredients,
               ])
     _, result = the_map(intermediates, working_average, **kw)
     return result
